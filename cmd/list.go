@@ -18,6 +18,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"opman/util"
 
 	"github.com/spf13/cobra"
 )
@@ -41,8 +42,25 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("list called")
 
-		for _,arg := range args {
+		name := ""
+		types := ""
+		labelSelector := ""
+		limit := ""
+		if len(args) >= 3 {
+			limit = args[2]
+		}
+		if len(args) >= 2 {
+			labelSelector = args[1]
+		}
+		if len(args) >= 1 {
+			types = args[0]
+		}
+		for _, arg := range args {
 			fmt.Printf("Arg: %s \n", arg)
+		}
+		err := util.ListServerItems(name, namespace, types, labelSelector+limit)
+		if err != nil {
+			fmt.Println(err.Error())
 		}
 	},
 }
