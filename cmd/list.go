@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"opman/util"
 
@@ -33,12 +32,16 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("requires a type argument")
-		}
-		return nil
-	},
+	//Args: func(cmd *cobra.Command, args []string) error {
+	//	if len(args) < 1 {
+	//		return errors.New("requires a type argument")
+	//	}
+	//	if cobra.RangeArgs(0, 3) {
+	//		return nil
+	//	}
+	//	return nil
+	//},
+	Args: cobra.RangeArgs(0, 3),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("list called")
 
@@ -58,7 +61,8 @@ to quickly create a Cobra application.`,
 		for _, arg := range args {
 			fmt.Printf("Arg: %s \n", arg)
 		}
-		err := util.ListServerItems(name, namespace, types, labelSelector+limit)
+		fmt.Printf("Namespace=[%s] \n", Namespace)
+		err := util.ListServerItems(name, Namespace, types, labelSelector+limit)
 		if err != nil {
 			fmt.Println(err.Error())
 		}

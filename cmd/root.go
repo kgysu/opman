@@ -25,7 +25,7 @@ import (
 )
 
 var cfgFile string
-var namespace string
+var Namespace string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -60,10 +60,11 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.opman.yaml)")
 
-	rootCmd.Flags().StringVarP(&namespace, "namespace", "n", "", "Namespace (or project) from Openshift (required)")
-	err := rootCmd.MarkFlagRequired("namespace")
+	rootCmd.PersistentFlags().StringVarP(&Namespace, "namespace", "n", "", "Namespace (or project) from Openshift (required)")
+	err := rootCmd.MarkPersistentFlagRequired("namespace")
 	if err != nil {
-		fmt.Println("Namespace not set!")
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 
 	// Cobra also supports local flags, which will only run
