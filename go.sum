@@ -125,6 +125,8 @@ github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/kgysu/oc-wrapper v0.0.4 h1:SQG7AQJ89HucFwoXMn3RCxk4CrEwStSsIGi+AEWmBZ0=
 github.com/kgysu/oc-wrapper v0.0.4/go.mod h1:IBv7S8GAYU25TT2DKVQFLWBa3MywzHrUjhGGiyw9osM=
+github.com/kgysu/oc-wrapper v0.0.5 h1:if9XKGaO7LUp+ngkEv5Ci7JBPIyghGBcwQB8PU4SGhk=
+github.com/kgysu/oc-wrapper v0.0.5/go.mod h1:IBv7S8GAYU25TT2DKVQFLWBa3MywzHrUjhGGiyw9osM=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/errcheck v1.2.0/go.mod h1:/BMXB+zMLi60iA8Vv6Ksmxu/1UDYcXs4uQLJ+jE2L00=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=

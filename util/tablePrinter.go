@@ -16,3 +16,13 @@ func NewStandardTable(items []v2.OpenshiftItem) table.Writer {
 	t.AppendFooter(table.Row{"=", "Total", len(items)})
 	return t
 }
+
+func NewMonitorItemsTable(items []MonitorItem) table.Writer {
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"#", "Kind", "Name"})
+	for i, item := range items {
+		t.AppendRow(table.Row{i, item.item.GetKind(), item.status + item.item.GetName()})
+	}
+	return t
+}

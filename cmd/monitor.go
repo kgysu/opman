@@ -17,35 +17,32 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
+	"opman/util"
 )
 
 // monitorCmd represents the monitor command
 var monitorCmd = &cobra.Command{
 	Use:   "monitor",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Monitor openshift objects and show diffs in real time.",
+	Long: `
+Monitor:
+`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("monitor called")
+		types, _ := cmd.Flags().GetString("types")
+		labelSelector, _ := cmd.Flags().GetString("label")
+		limit, _ := cmd.Flags().GetInt64("limit")
+
+		err := util.MonitorRemoteItems("", Namespace, types, labelSelector, limit)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(monitorCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// monitorCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// monitorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	monitorCmd.Flags().String("types", "", "Object types like pod. Comma separated list.")
+	monitorCmd.Flags().String("label", "", "additional Openshift Label-Selector")
+	monitorCmd.Flags().Int64("limit", 0, "additional limitation of items returned")
 }
