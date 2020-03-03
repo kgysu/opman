@@ -20,9 +20,9 @@ func NewStandardTable(items []v2.OpenshiftItem) table.Writer {
 func NewMonitorItemsTable(items []MonitorItem) table.Writer {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"#", "Kind", "Name", "Status"})
+	t.AppendHeader(table.Row{"#", "Status", "Kind", "Name"})
 	for i, item := range items {
-		t.AppendRow(table.Row{i, item.item.GetKind(), item.status + item.item.GetName(), item.item.GetStatusMessage()})
+		t.AppendRow(table.Row{i, item.status, item.item.GetKind(), item.item.GetName()})
 	}
 	return t
 }
