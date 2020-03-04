@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"opman/util"
 
@@ -26,39 +25,31 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "List all remote Openshift objects in a Table.",
+	Long: `Prints a Table containing all the requested objects found on remote server
+filtered by type or labelSelector:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("requires a type argument")
-		}
-		return nil
-	},
+Syntax:
+  list <flags>
+
+Examples
+  project list
+  project list --types=Pod
+  project list --types=Pod,ConfigMap,Service,Route,DeploymentConfig
+  project list --limit=10
+
+Flags:
+  --types	Object Types to list(comma separated), e.g.: Pods,ConfigMaps,,,
+  --label	Openshift Label-Selector.
+  --limit	Limit number of items.
+`,
+	Args: cobra.RangeArgs(0, 3),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		types, _ := cmd.Flags().GetString("types")
+		labelSelector, _ := cmd.Flags().GetString("label")
+		limit, _ := cmd.Flags().GetInt64("limit")
 
-		name := ""
-		types := ""
-		labelSelector := ""
-		limit := ""
-		if len(args) >= 3 {
-			limit = args[2]
-		}
-		if len(args) >= 2 {
-			labelSelector = args[1]
-		}
-		if len(args) >= 1 {
-			types = args[0]
-		}
-		for _, arg := range args {
-			fmt.Printf("Arg: %s \n", arg)
-		}
-		err := util.ListServerItems(name, namespace, types, labelSelector+limit)
+		err := util.ListServerItems("", Namespace, types, labelSelector, limit)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -67,17 +58,7 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	listCmd.Flags().String("type", "mon", "Object type like pod, comma separated list")
-	listCmd.Flags().String("label", "", "Openshift Label-Selector")
-	listCmd.Flags().String("limit", "0", "Limitation of items returned")
+	listCmd.Flags().String("types", "", "Object types like pod. Comma separated list.")
+	listCmd.Flags().String("label", "", "additional Openshift Label-Selector")
+	listCmd.Flags().Int64("limit", 0, "additional limitation of items returned")
 }

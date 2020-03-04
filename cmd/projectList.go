@@ -18,31 +18,48 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"opman/util/project"
 )
 
 // listCmd represents the list command
 var listProjectCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List Openshift Items",
-	Long: `List Openshift Items filtered by types or Label-Selector:
+	Short: "list all files",
+	Long: `List all project files found in './<folder>':
+
+Syntax:
+  project list <flags>
+
+Examples
+  project list 
+  project list --folder=something
+  project list -d
+  project list --debug
+
+Flags:
+  --folder	path to local project
+  --debug	debug mode on
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		fmt.Println()
+		folder, _ := cmd.Flags().GetString("folder")
+		fmt.Printf("List Objects found in './%s' \n", folder)
+		debug, _ := cmd.Flags().GetBool("debug")
+		if debug {
+			fmt.Println("Running in Debug-Mode.")
+		}
 
+		err := project.ListLocalProjectFiles(Namespace, folder, debug)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Println()
 	},
 }
 
 func init() {
 	projectCmd.AddCommand(listProjectCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	listProjectCmd.Flags().String("folder", "items", "Path to items folder.")
+	listProjectCmd.Flags().BoolP("debug", "d", false, "Debug-Mode: create output file to determine result.")
 }
